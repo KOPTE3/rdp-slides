@@ -1,22 +1,22 @@
 {
-  "name": "shellcode-slides",
+  "name": "rdp-slides",
   "version": "1.0.0",
-  "description": "Introduction to shell coding",
+  "description": "Introduction to RDP",
   "main": "index.html",
   "scripts": {
     "start": "reload -b"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KOPTE3/shellcode-slides.git"
+    "url": "git+https://github.com/KOPTE3/rdp-slides.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/KOPTE3/shellcode-slides/issues"
+    "url": "https://github.com/KOPTE3/rdp-slides/issues"
   },
-  "homepage": "https://github.com/KOPTE3/shellcode-slides#readme",
+  "homepage": "https://github.com/KOPTE3/rdp-slides#readme",
   "devDependencies": {
     "reload": "^1.1.1"
   }

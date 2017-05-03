@@ -1,5 +1,5 @@
-# shellcode-slides
-Introduction to shell coding
+# rdp-slides
+Introduction to RDP
 
 ## How to run
 
